@@ -1,0 +1,1 @@
+/home/minhal/Poc/inditab_task/build/app/intermediates/cxx/Debug/6v411o3u/obj/arm64-v8a

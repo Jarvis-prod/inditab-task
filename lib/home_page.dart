@@ -27,6 +27,20 @@ class HomePage extends StatelessWidget {
         ]
       },
       {
+        'type': 'brand',
+        'brand_cat':[
+          {
+            'icon':'assets/send.png',
+            'label':'Buy',
+            'title':'Brand New'
+          }, {
+            'icon':'assets/refurbished.png',
+            'label':'Buy',
+            'title':'Refurbished'
+          },
+        ]
+      },
+      {
         'type': 'OfferSection',
         'title': 'Offer & Discount',
         'images': [
@@ -34,6 +48,7 @@ class HomePage extends StatelessWidget {
           {'pic': 'assets/sbi.png'}
         ]
       },
+
       {
         'type': 'productGrid',
         'products': [
@@ -48,7 +63,8 @@ class HomePage extends StatelessWidget {
             'price': 'off ₹9,499'
           },
         ]
-      }
+      },
+
     ];
     return Scaffold(
       body: ListView.builder(
@@ -76,6 +92,8 @@ class WidgetFactory {
           title: json['title'],
           categories: json['categories'],
         );
+      case 'brand':
+        return BrandCategory(categories: json['brand_cat'],);
       case 'OfferSection':
         return OffersWidget(
           images: json['images'],
@@ -269,6 +287,49 @@ class OffersWidget extends StatelessWidget {
   }
 }
 
+class BrandCategory extends StatelessWidget {
+  final List<dynamic> categories;
+  const BrandCategory({super.key, required this.categories});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 140,
+      child: ListView.builder(
+        itemCount: categories.length,
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          var data=categories[index];
+          return Container(
+            height: 140,
+            width: 140,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.lightGreen.shade300,),
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(data['icon']),
+                const SizedBox(height:10),
+                Text(data['label'],style: TextStyle(fontSize: 10,color: Colors.black),),
+                const SizedBox(height:5),
+                Row(
+                  children: [
+                    Text(data['title'],style: TextStyle(fontSize: 16,color: Colors.black,fontWeight: FontWeight.w600),),
+                    const SizedBox(width:10),
+                    Icon(Icons.arrow_forward,size: 16)
+                  ],
+                ),
+              ],
+            ),
+          );
+        },),
+    );
+  }
+}
+
 class ProductGridWidget extends StatelessWidget {
   final List<dynamic> products;
 
@@ -277,47 +338,74 @@ class ProductGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 220,
-      child: ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        scrollDirection: Axis.horizontal,
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              spacing: 40,
+      height: 310,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(product['image'], height: 100, fit: BoxFit.cover),
-                Container(
-                  height: 50,
-                  // margin:const EdgeInsets.symmetric(horizontal: 5),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10)),
-                    color: Color(0xFFFFDD4F),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 10,
-                    children: [
-                      Text(product['discount']),
-                      Text(
-                        product['price'],
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ],
-                  ),
-                )
+                CircleAvatar(
+                  backgroundColor: Colors.blueGrey,
+                    child: Icon(Icons.percent_outlined,color: Colors.white,)),
+                const SizedBox(width: 10),
+                Text('Deal of the day',style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),),
+                const SizedBox(width: 50),
+                Text('View All',style: TextStyle(fontSize: 10,fontWeight: FontWeight.w600,color: Colors.grey),),
+                const SizedBox(width: 5),
+                Icon(Icons.arrow_forward,size: 10,color: Colors.grey,)
               ],
             ),
-          );
-        },
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              scrollDirection: Axis.horizontal,
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      Image.asset(product['image'], height: 100, fit: BoxFit.cover),
+                      const SizedBox(height: 16),
+                      Text('Flex 3 Seater Magic B...'),
+                      const SizedBox(height: 14),
+                      Container(
+                        height: 50,
+                        // margin:const EdgeInsets.symmetric(horizontal: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          color: Color(0xFFFFDD4F),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 10,
+                          children: [
+                            Text(product['discount']),
+                            Text(
+                              product['price'],
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
